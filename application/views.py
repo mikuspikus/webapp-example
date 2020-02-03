@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
+from django.template import loader, Context
 
 from typing import Union
 
-import csv
+import openpyxl as xl
+import datetime
 
 from . import models
 from . import forms 
@@ -48,20 +50,31 @@ class IndexView(View):
         )
 
 class UploadView(View):
-    filename = 'applications.csv'
+    filename_template = 'applications-{date}.xlsx'
     model = models.Application
+    title = 'Applications'
     header = ('name', 'surname', 'phone', 'applied_at')
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        response = HttpResponse(content_type = 'text/csv')
-        response['Content-Disposition'] = f'attachment; filename="{self.filename}"'
+        response = HttpResponse(content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        filename = self.filename_template.format(date = datetime.datetime.now().strftime('%Y-%m-%d'))
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
-        writer = csv.writer(response)
-        writer.writerow(self.header)
+        workbook = xl.Workbook()
+        worksheet = workbook.active
+        worksheet.title = self.title
 
-        data = self.model.objects.all()
-        for row in data:
-            writer.writerow(row.row())
+        r_num = 1
+        for c_num, c_header in enumerate(self.header, 1):
+            cell = worksheet.cell(row = r_num, column = c_num, value = c_header)
 
+        data = [row.row() for row in self.model.objects.all()]
+
+        for data_row in data:
+            r_num += 1
+            for c_num, value in enumerate(data_row, 1):
+                cell = worksheet.cell(row = r_num, column = c_num, value = value)
+
+        workbook.save(response)
         return response
 
