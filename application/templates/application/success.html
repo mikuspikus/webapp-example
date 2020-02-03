@@ -1,0 +1,15 @@
+{% extends 'application/base.html' %}
+
+{% block body %}
+    <div class = 'limiter'>
+        <div class = 'container-login100'>
+            <div class="wrap-login100 p-t-50 p-b-90">
+                <form class = "login100-form validate-form flex-sb flex-w" action = "{% url 'application:index' %}" method = "post">
+
+                    <span class="login100-form-title p-b-51">Спасибо за заявку</span>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

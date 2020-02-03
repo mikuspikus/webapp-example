@@ -1,0 +1,28 @@
+language: python
+
+python:
+  - '3.6.1'
+
+install:
+  - pip install -r requirements.txt
+
+deploy:
+  provider: heroku
+
+  buildpack: python
+
+  api_key:
+    secure: 4f436f79-f0f8-4d3a-8599-f1fbc8f6dcd9
+
+  strategy: git
+
+  app: whispering-castle-35269
+
+  on:
+    repo: mikuspikus/webapp-example
+
+  run:
+    - python manage.py migrate
+    - restart
+
+script: python manage.py test

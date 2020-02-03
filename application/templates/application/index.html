@@ -1,0 +1,29 @@
+{% extends 'application/base.html' %}
+{% load extras %}
+
+{% block body %}
+    {% if form %}
+    <div class = 'limiter'>
+        <div class = 'container-login100'>
+            <div class="wrap-login100 p-t-50 p-b-90">
+                <form class = "login100-form validate-form flex-sb flex-w" action = "{% url 'application:index' %}" method = "post">
+                    {% csrf_token %}
+
+                    <span class="login100-form-title p-b-51">Подать заявку</span>
+                    {% custom_render form %}
+                    
+                    <div class="container-login100-form-btn m-t-17">
+                        <button class="login100-form-btn">
+                            Отправить
+                        </button>
+                    </div>
+                <form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="dropDownSelect1"></div>
+    {% else %}
+        <h4>На сервере произошла ошибка</h4>
+    {% endif %}
+{% endblock body %}

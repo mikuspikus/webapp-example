@@ -1,0 +1,22 @@
+
+{% for error in form.non_field_error %}
+    {% for error in field.erros %}
+        <div class = "">
+            {{ error }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% for field in form %}
+<div class="wrap-input100 validate-input m-b-16">
+    {{ field }}
+    <span class="focus-input100"></span>
+    {% if field.errors %}
+        {% for error in field.erros %}
+        <div class = "">
+            {{ error }}
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endfor %}
