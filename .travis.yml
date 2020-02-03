@@ -26,5 +26,4 @@ deploy:
     - restart
 
 script: 
-  - cd webappcourse
   - python manage.py test
